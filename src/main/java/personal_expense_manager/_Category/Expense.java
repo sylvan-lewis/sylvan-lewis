@@ -3,8 +3,8 @@ package personal_expense_manager._Category;
 import java.util.Date;
 
 public class Expense {
-	private Long expenseId = System.currentTimeMillis();
-	private Long categoryId; 
+	//private String expenseId //= System.currentTimeMillis();
+	private String categoryId; 
 	private Float amount;
 	private Date date;
 	private String remark;
@@ -15,7 +15,7 @@ public class Expense {
 	
 	
 	
-	public Expense(Long categoryId, Float amount, Date date, String remark) {
+	public Expense(String categoryId, Float amount, Date date, String remark) {
 		super();
 		this.categoryId = categoryId;
 		this.amount = amount;
@@ -24,20 +24,11 @@ public class Expense {
 	}
 
 
-
-	public Long getExpenseId() {
-		return expenseId;
-	}
-
-	public void setExpenseId(Long expenseId) {
-		this.expenseId = expenseId;
-	}
-
-	public Long getCategoryId() {
+	public String getCategoryId() {
 		return categoryId;
 	}
 
-	public void setCategoryId(Long categoryId) {
+	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
 
