@@ -68,7 +68,7 @@ public class ReportService {
 					return c.getName();
 				}
 			}
-			return " ";
+			return null;
 		}
 		
 		public static void main(String[] args) {

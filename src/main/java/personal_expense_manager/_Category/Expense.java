@@ -7,7 +7,7 @@ public class Expense {
 	private String categoryId; 
 	private Float amount;
 	private Date date;
-	private String remark;
+	private String remark; // type of entry expense or income
 	
 	public Expense() {
 		
@@ -24,36 +24,20 @@ public class Expense {
 	}
 
 
-	public String getCategoryId() {
-		return categoryId;
-	}
+	public String getCategoryId() {return categoryId;}
 
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
+	public void setCategoryId(String categoryId) {this.categoryId = categoryId;}
 
-	public Float getAmount() {
-		return amount;
-	}
+	public Float getAmount() {return amount;}
 
-	public void setAmount(Float amount) {
-		this.amount = amount;
-	}
+	public void setAmount(Float amount) {this.amount = amount;}
 
-	public Date getDate() {
-		return date;
-	}
+	public Date getDate() {return date;}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+	public void setDate(Date date) {this.date = date;}
 
-	public String getRemark() {
-		return remark;
-	}
+	public String getRemark() {return remark;}
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+	public void setRemark(String remark) {this.remark = remark;}
 
 }
