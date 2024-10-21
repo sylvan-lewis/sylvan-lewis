@@ -1,8 +1,11 @@
 package personal_expense_manager._Category;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Expense {
+public class Expense implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private Long expenseId = System.currentTimeMillis();
 	private Long categoryId; 
 	private Float amount;

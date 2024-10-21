@@ -1,7 +1,10 @@
 package personal_expense_manager._Category;
 
-public class Category {
+import java.io.Serializable;
 
+public class Category implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 		private Long categoryId = System.currentTimeMillis();
 		private String name;
 		

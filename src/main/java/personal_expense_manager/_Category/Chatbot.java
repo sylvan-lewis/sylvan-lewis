@@ -1,6 +1,10 @@
 package personal_expense_manager._Category;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -10,6 +14,7 @@ import java.util.Set;
 
 public class Chatbot {
 
+	
 	Repository repo = Repository.getRepository();
 
 	ReportService reportService = new ReportService();
@@ -19,6 +24,7 @@ public class Chatbot {
 
 	public Chatbot() {
 
+		restoreRepository();
 	}
 
 	public void showMenu() {
@@ -70,11 +76,6 @@ public class Chatbot {
 		}
 	}
 
-	// private void expenseEntry() {
-	// throw new UnsupportedOperationException("Not supported yet.");
-
-	// }
-
 	public void printMenu() {
 		System.out.println("-----Welcome to YourExpense!-----");
 		System.out.println("1. Add Category");
@@ -92,7 +93,7 @@ public class Chatbot {
 	}
 
 	public void pressAnyKeyToContinue() {
-		System.out.println("Press any key to continue...");
+		System.out.println("Press the 'Enter' key to continue...");
 		try {
 			System.in.read();
 		} catch (IOException e) {
@@ -147,8 +148,7 @@ public class Chatbot {
 		System.out.println("Success: Expense Added");
 
 	}
-	
-	
+
 	private void onExpenseList() {
 		System.out.println("Expense Listing...");
 		List<Expense> expList = repo.expList;
@@ -205,7 +205,58 @@ public class Chatbot {
 	}
 
 	private void onExit() {
+		persistRepository();
 		System.exit(0);
+
+	}
+
+	private void persistRepository() {
+		serialize("expense.txt", repo.expList);
+		serialize("categories.txt", repo.catList);
+
+	}
+
+	public void serialize(String file, Object obj) {
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(repo.expList);
+
+			oos.close();
+			fos.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public Object deser(String file) {
+		try 
+			(FileInputStream fis = new FileInputStream(file);
+			ObjectInputStream ois = new ObjectInputStream(fis)){	
+			//Object obj = ois.readObject();
+			return ois.readObject();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+
+			System.out.println("No existing data present.");
+			return null;
+		}
+	}
+	
+
+	private void restoreRepository() {
+		String expensesFilePath = "/personal_expense_manager/src/main/java/personal_expense_manager/_Category/expenses.txt";
+		
+		List<Expense> expList = (List<Expense>) deser(expensesFilePath);
+		if (expList != null) {
+			repo.expList = expList;
+		}
+		
+		String categoriesFilePath = "/personal_expense_manager/src/main/java/personal_expense_manager/_Category/categories.txt";
+		List<Category> catList = (List<Category>) deser(categoriesFilePath);
+		if (catList != null) {
+			repo.catList = catList;
+		}
 
 	}
 
