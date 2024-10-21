@@ -47,7 +47,7 @@ public class ReportService {
 			Map<String, Float> m = new TreeMap<>();
 			
 			for (Expense exp : repo.expList) {
-				String categoryId = exp.getCategoryId();
+				Long categoryId = exp.getCategoryId();
 				String catName = this.getCategoryName(categoryId);
 				
 				if(m.containsKey (catName)) {
@@ -62,7 +62,7 @@ public class ReportService {
 			return m; 		
 		}
 		
-		public String getCategoryName(String categoryId) {
+		public String getCategoryName(Long categoryId) {
 			for (Category c : repo.catList) {
 				if(c.getCategoryId() != null && c.getCategoryId().equals(categoryId)) {
 					return c.getName();

@@ -3,11 +3,12 @@ package personal_expense_manager._Category;
 import java.util.Date;
 
 public class Expense {
-	//private String expenseId //= System.currentTimeMillis();
-	private String categoryId; 
+	private Long expenseId = System.currentTimeMillis();
+	private Long categoryId; 
 	private Float amount;
 	private Date date;
-	private String remark; // type of entry expense or income
+	private String remark;
+	//private String name;
 	
 	public Expense() {
 		
@@ -15,18 +16,20 @@ public class Expense {
 	
 	
 	
-	public Expense(String categoryId, Float amount, Date date, String remark) {
-		super();
+	public Expense(Long categoryId, Float amount, Date date, String remark) {
 		this.categoryId = categoryId;
 		this.amount = amount;
 		this.date = date;
 		this.remark = remark;
 	}
 
+	public Long getExpenseId() {return expenseId;}
+	
+	public void setExpenseId(Long expenseId) {this.expenseId= expenseId;}
+	
+	public Long getCategoryId() {return categoryId;}
 
-	public String getCategoryId() {return categoryId;}
-
-	public void setCategoryId(String categoryId) {this.categoryId = categoryId;}
+	public void setCategoryId(Long categoryId) {this.categoryId = categoryId;}
 
 	public Float getAmount() {return amount;}
 
