@@ -168,11 +168,11 @@ public class Chatbot {
 		Map<String, Float> resultMap = reportService.calculateMonthlyTotal();
 		Set<String> keys = resultMap.keySet();
 		for (String yearMonth : keys) {
-			String[] arr = yearMonth.split(", ");
-			String year = arr[0];
-			Integer monthNo = Integer.valueOf(arr[1]);
-			String monthName = DateUtil.getMonthName(monthNo);
-			System.out.println(year + ", " + monthName + " : " + resultMap.get(yearMonth));
+			//String[] arr = yearMonth.split(", ");
+			//String year = arr[0];
+			//Integer monthNo = Integer.valueOf(arr[1]);
+			//String monthName = DateUtil.getMonthName(monthNo);
+			System.out.println(yearMonth + " : " + resultMap.get(yearMonth));
 		}
 	}
 
@@ -245,14 +245,14 @@ public class Chatbot {
 	
 
 	private void restoreRepository() {
-		String expensesFilePath = "/personal_expense_manager/src/main/java/personal_expense_manager/_Category/expenses.txt";
+		String expensesFilePath = "personal_expense_manager/src/main/java/personal_expense_manager/_Category/expenses.txt";
 		
 		List<Expense> expList = (List<Expense>) deser(expensesFilePath);
 		if (expList != null) {
 			repo.expList = expList;
 		}
 		
-		String categoriesFilePath = "/personal_expense_manager/src/main/java/personal_expense_manager/_Category/categories.txt";
+		String categoriesFilePath = "personal_expense_manager/src/main/java/personal_expense_manager/_Category/categories.txt";
 		List<Category> catList = (List<Category>) deser(categoriesFilePath);
 		if (catList != null) {
 			repo.catList = catList;

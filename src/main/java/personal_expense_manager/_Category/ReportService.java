@@ -21,9 +21,8 @@ public class ReportService {
 				}else {
 					m.put(yearMonth, exp.getAmount());
 					
-				}
-					
-				}
+				}	
+			}
 			return m; 	
 		}
 		public Map<Integer, Float> calculateYearlyTotal(){
