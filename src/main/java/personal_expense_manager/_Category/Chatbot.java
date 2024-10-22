@@ -114,6 +114,10 @@ public class Chatbot {
         onCategoryList();  // Display the categories to choose from
         System.out.print("Choose category (by number): ");
         int catChoice = s.nextInt();
+        if (catChoice < 1 || catChoice > repo.catList.size()) {
+            System.out.println("Invalid category choice.");
+            return;
+        }
         Category selectedCat = repo.catList.get(catChoice - 1);
 
         System.out.print("Enter Amount: ");
@@ -212,18 +216,27 @@ public class Chatbot {
         try (Scanner scanner = new Scanner(new FileInputStream(fileName))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                String[] parts = line.split(",");
+
+                // Check if the line has the expected number of parts
                 if (cls == Category.class) {
-                    String[] parts = line.split(",");
-                    Category category = new Category(parts[1].trim());
-                    list.add(cls.cast(category));
+                    if (parts.length > 1) {
+                        Category category = new Category(parts[1].trim());
+                        list.add(cls.cast(category));
+                    } else {
+                        System.out.println("Invalid category format in file: " + line);
+                    }
                 } else if (cls == Expense.class) {
-                    String[] parts = line.split(",");
-                    Expense exp = new Expense();
-                    exp.setCategoryId(Long.decode(parts[0].trim()));
-                    exp.setAmount(Float.parseFloat(parts[1].trim()));
-                    exp.setRemark(parts[2].trim());
-                    exp.setDate(DateUtil.stringToDate(parts[3].trim()));
-                    list.add(cls.cast(exp));
+                    if (parts.length == 4) {  // Expecting 4 parts for Expense
+                        Expense exp = new Expense();
+                        exp.setCategoryId(Long.decode(parts[0].trim()));
+                        exp.setAmount(Float.parseFloat(parts[1].trim()));
+                        exp.setRemark(parts[2].trim());
+                        exp.setDate(DateUtil.stringToDate(parts[3].trim()));
+                        list.add(cls.cast(exp));
+                    } else {
+                        System.out.println("Invalid expense format in file: " + line);
+                    }
                 }
             }
         } catch (IOException e) {
