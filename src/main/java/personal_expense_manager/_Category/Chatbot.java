@@ -1,263 +1,249 @@
 package personal_expense_manager._Category;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 public class Chatbot {
 
-	
-	Repository repo = Repository.getRepository();
+    Repository repo = Repository.getRepository();
+    ReportService reportService = new ReportService();
 
-	ReportService reportService = new ReportService();
+    private Scanner s = new Scanner(System.in);
+    private int choice;
 
-	private Scanner s = new Scanner(System.in);
-	private int choice;
+    public Chatbot() {
+        restoreRepository();  // Restore data from text files when the chatbot starts
+    }
 
-	public Chatbot() {
+    public void showMenu() {
+        while (true) {
+            try {
+                printMenu();
+                switch (choice) {
+                    case 1:
+                        onAddCategory();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 2:
+                        onCategoryList();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 3:
+                        onExpenseEntry();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 4:
+                        onExpenseList();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 5:
+                        onMonthlyExpenseList();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 6:
+                        onYearlyExpenseList();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 7:
+                        onCategorizedExpenseList();
+                        pressAnyKeyToContinue();
+                        break;
+                    case 0:
+                        onExit();
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please enter a valid option (0-7).");
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please try again.");
+                s.next();  // Clear invalid input
+            }
+        }
+    }
 
-		restoreRepository();
-	}
+    public void printMenu() {
+        System.out.println("----- Welcome to YourExpense! -----");
+        System.out.println("1. Add Category");
+        System.out.println("2. Category List");
+        System.out.println("3. Expense Entry");
+        System.out.println("4. Expense List");
+        System.out.println("5. Monthly Expense List");
+        System.out.println("6. Yearly Expense List");
+        System.out.println("7. Categorized Expense List");
+        System.out.println("0. Exit");
+        System.out.println("----------------------------------");
+        System.out.print("Enter your choice: ");
+        choice = s.nextInt();
+    }
 
-	public void showMenu() {
-		while (true) {
-			try {
-				printMenu();
-				switch (choice) {
-				// add category logic goes here
-				case 1:
-					onAddCategory();
-					pressAnyKeyToContinue();
-					break;
-				case 2:
-					onCategoryList();
-					pressAnyKeyToContinue();
-					break;
-				case 3:
-					onExpenseEntry();
-					pressAnyKeyToContinue();
-					break;
-				case 4:
-					onExpenseList();
-					pressAnyKeyToContinue();
-					break;
-				case 5:
-					onMonthlyExpenseList();
-					pressAnyKeyToContinue();
-					break;
-				case 6:
-					onYearlyExpenseList();
-					pressAnyKeyToContinue();
-					break;
-				case 7:
-					onCategorizedExpenseList();
-					pressAnyKeyToContinue();
-					break;
-				case 0:
-					onExit();
-					break;
-				default:
-					System.out.println("Invalid option. Please enter a valid output (0-7).");
-					break;
-				}
+    public void pressAnyKeyToContinue() {
+        System.out.println("Press 'Enter' to continue...");
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-			} catch (InputMismatchException e) {
-				System.out.println("Invalid input. Use the provided output, Try again.");
-				s.next();
-			}
-		}
-	}
+    // Method to add a category
+    public void onAddCategory() {
+        s.nextLine();  // Consume newline
+        System.out.print("Enter Category Name: ");
+        String catName = s.nextLine();
+        Category cat = new Category(catName);
+        repo.catList.add(cat);
+        System.out.println("Success: Category Added.");
 
-	public void printMenu() {
-		System.out.println("-----Welcome to YourExpense!-----");
-		System.out.println("1. Add Category");
-		System.out.println("2. Category List");
-		System.out.println("3. Expense Entry");
-		System.out.println("4. Expense List");
-		System.out.println("5. Monthly Expense List");
-		System.out.println("6. Yearly Expense List");
-		System.out.println("7. Categorized Expense List");
-		System.out.println("0. Exit");
-		System.out.println("----------------------------------");
-		System.out.println("Enter your choice: ");
-		choice = s.nextInt();
+        // Write the new category to the text file
+        writeToFile("categories.txt", repo.catList);
+    }
 
-	}
+    // Method to list all categories
+    public void onCategoryList() {
+        System.out.println("Category List");
+        for (int i = 0; i < repo.catList.size(); i++) {
+            Category c = repo.catList.get(i);
+            System.out.println((i + 1) + ". " + c.getName() + ", " + c.getCategoryId());
+        }
+    }
 
-	public void pressAnyKeyToContinue() {
-		System.out.println("Press the 'Enter' key to continue...");
-		try {
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    // Method to add an expense entry
+    public void onExpenseEntry() {
+        System.out.println("Enter Details for Expense Entry...");
+        onCategoryList();  // Display the categories to choose from
+        System.out.print("Choose category (by number): ");
+        int catChoice = s.nextInt();
+        Category selectedCat = repo.catList.get(catChoice - 1);
 
-	}
+        System.out.print("Enter Amount: ");
+        float amount = s.nextFloat();
 
-	public void onAddCategory() {
-		s.nextLine();
-		System.out.print("Enter Category Name: ");
-		String catName = s.nextLine();
-		Category cat = new Category(catName);
-		repo.catList.add(cat);
-		System.out.println("Success: Category Added: ");
-	}
+        System.out.print("Enter Remark: ");
+        s.nextLine();  // Consume newline
+        String remark = s.nextLine();
 
-	public void onCategoryList() {
-		System.out.println("Category List");
-		List<Category> clist = repo.catList;
-		for (int i = 0; i < clist.size(); i++) {
-			Category c = clist.get(i);
-			System.out.println((i + 1) + ". " + c.getName() + ", " + c.getCategoryId());
+        System.out.print("Enter Date (DD/MM/YYYY): ");
+        String dateAsString = s.nextLine();
+        Date date = DateUtil.stringToDate(dateAsString);
 
-		}
-	}
+        Expense exp = new Expense(selectedCat.getCategoryId(), amount, date, remark);
+        repo.expList.add(exp);
+        System.out.println("Success: Expense Added.");
 
-	public void onExpenseEntry() {
-		System.out.println("Enter Details for Expense Entry...");
-		onCategoryList();
-		System.out.println("Choose category: ");
-		int catChoice = s.nextInt();
-		Category selectedCat = repo.catList.get(catChoice - 1);
+        // Write the new expense to the text file
+        writeToFile("expenses.txt", repo.expList);
+    }
 
-		System.out.println("Enter Amount : ");
-		float amount = s.nextFloat();
+    // Method to list all expenses
+    private void onExpenseList() {
+        System.out.println("Expense Listing...");
+        for (Expense exp : repo.expList) {
+            String catName = reportService.getCategoryName(exp.getCategoryId());
+            String dateString = DateUtil.dateToString(exp.getDate());
+            System.out.println(catName + ", " + exp.getAmount() + ", " + exp.getRemark() + ", " + dateString);
+        }
+    }
 
-		System.out.println("Enter Remark : ");
-		s.nextLine();
-		String remark = s.nextLine();
-		System.out.println("Enter Date (DD/MM/YYYY): ");
-		String dateAsString = s.nextLine();
-		Date date = DateUtil.stringToDate(dateAsString);
+    private void onMonthlyExpenseList() {
+        System.out.println("Monthly Expense Total...");
+        Map<String, Float> resultMap = reportService.calculateMonthlyTotal();
+        for (String yearMonth : resultMap.keySet()) {
+            System.out.println(yearMonth + " : " + resultMap.get(yearMonth));
+        }
+    }
 
-		Expense exp = new Expense();
-		exp.setCategoryId(selectedCat.getCategoryId());
-		exp.setAmount(amount);
-		exp.setRemark(remark);
-		exp.setDate(date);
+    private void onYearlyExpenseList() {
+        System.out.println("Yearly Expense Total...");
+        Map<Integer, Float> resultMap = reportService.calculateYearlyTotal();
+        float total = 0.0F;
+        for (Integer year : resultMap.keySet()) {
+            float yearlyTotal = resultMap.get(year);
+            total += yearlyTotal;
+            System.out.println(year + " : " + yearlyTotal);
+        }
+        System.out.println("Total Expenses: " + total);
+    }
 
-		repo.expList.add(exp);
-		System.out.println("Success: Expense Added");
+    private void onCategorizedExpenseList() {
+        System.out.println("Category-wise Expense Listing...");
+        Map<String, Float> resultMap = reportService.calculateCategoriedTotal();
+        float netTotal = 0.0F;
+        for (String categoryName : resultMap.keySet()) {
+            float catWiseTotal = resultMap.get(categoryName);
+            netTotal += catWiseTotal;
+            System.out.println(categoryName + " : " + catWiseTotal);
+        }
+        System.out.println("Net Total: " + netTotal);
+    }
 
-	}
+    // Exit the program and save the data
+    private void onExit() {
+        persistRepository();
+        System.exit(0);
+    }
 
-	private void onExpenseList() {
-		System.out.println("Expense Listing...");
-		List<Expense> expList = repo.expList;
-		for (int i = 0; i < expList.size(); i++) {
-			Expense exp = expList.get(i);
-			String catName = reportService.getCategoryName(exp.getCategoryId());
-			String dateString = DateUtil.dateToString(exp.getDate());
-			System.out.println((i + 1) + ". " + catName + ", " + exp.getCategoryId() + ", " + exp.getAmount() + ", "
-					+ exp.getRemark() + ", " + dateString);
+    // Save the repository data to text files
+    private void persistRepository() {
+        writeToFile("categories.txt", repo.catList);
+        writeToFile("expenses.txt", repo.expList);
+    }
 
-		}
+    // Generic method to write data to a file
+    private <T> void writeToFile(String fileName, List<T> list) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (T item : list) {
+                writer.write(item.toString() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	}
+    // Restore data from text files when the application starts
+    private void restoreRepository() {
+        repo.catList = readFromFile("categories.txt", Category.class);
+        repo.expList = readFromFile("expenses.txt", Expense.class);
+    }
 
-	private void onMonthlyExpenseList() {
-		System.out.println("Monthly Expense Total...");
-		Map<String, Float> resultMap = reportService.calculateMonthlyTotal();
-		Set<String> keys = resultMap.keySet();
-		for (String yearMonth : keys) {
-			//String[] arr = yearMonth.split(", ");
-			//String year = arr[0];
-			//Integer monthNo = Integer.valueOf(arr[1]);
-			//String monthName = DateUtil.getMonthName(monthNo);
-			System.out.println(yearMonth + " : " + resultMap.get(yearMonth));
-		}
-	}
+    // Generic method to read data from a file and populate a list
+    private <T> List<T> readFromFile(String fileName, Class<T> cls) {
+        List<T> list = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new FileInputStream(fileName))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (cls == Category.class) {
+                    String[] parts = line.split(",");
+                    Category category = new Category(parts[1].trim());
+                    list.add(cls.cast(category));
+                } else if (cls == Expense.class) {
+                    String[] parts = line.split(",");
+                    Expense exp = new Expense();
+                    exp.setCategoryId(Long.decode(parts[0].trim()));
+                    exp.setAmount(Float.parseFloat(parts[1].trim()));
+                    exp.setRemark(parts[2].trim());
+                    exp.setDate(DateUtil.stringToDate(parts[3].trim()));
+                    list.add(cls.cast(exp));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("No existing data found for " + fileName);
+        }
+        return list;
+    }
 
-	private void onYearlyExpenseList() {
-		System.out.println("Yearly Expense Total...");
-		Map<Integer, Float> resultMap = reportService.calculateYearlyTotal();
-		Set<Integer> years = resultMap.keySet();
-		Float total = 0.0F;
-		for (Integer year : years) {
-			Float exp = resultMap.get(year);
-			total = total + exp;
-			System.out.println(year + " : " + resultMap.get(year));
-		}
-		System.out.println("----------------------------------");
-		System.out.println("Total Expenses: " + total);
-	}
-
-	private void onCategorizedExpenseList() {
-		System.out.println("Category wise Expense Listing...");
-		Map<String, Float> resultMap = reportService.calculateCategoriedTotal();
-		Set<String> categories = resultMap.keySet();
-		Float netTotal = 0.0F;
-		for (String categoryName : categories) {
-			Float catWiseTotal = resultMap.get(categoryName);
-			netTotal = netTotal + catWiseTotal;
-			System.out.println(categoryName + " : " + catWiseTotal);
-		}
-		System.out.println("--------------------------------");
-		System.out.println("Net Total : " + netTotal);
-	}
-
-	private void onExit() {
-		persistRepository();
-		System.exit(0);
-
-	}
-
-	private void persistRepository() {
-		serialize("expense.txt", repo.expList);
-		serialize("categories.txt", repo.catList);
-
-	}
-
-	public void serialize(String file, Object obj) {
-		try {
-			FileOutputStream fos = new FileOutputStream(file);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(repo.expList);
-
-			oos.close();
-			fos.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	public Object deser(String file) {
-		try 
-			(FileInputStream fis = new FileInputStream(file);
-			ObjectInputStream ois = new ObjectInputStream(fis)){	
-			//Object obj = ois.readObject();
-			return ois.readObject();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-
-			System.out.println("No existing data present.");
-			return null;
-		}
-	}
-	
-
-	private void restoreRepository() {
-		String expensesFilePath = "personal_expense_manager/src/main/java/personal_expense_manager/_Category/expenses.txt";
-		
-		List<Expense> expList = (List<Expense>) deser(expensesFilePath);
-		if (expList != null) {
-			repo.expList = expList;
-		}
-		
-		String categoriesFilePath = "personal_expense_manager/src/main/java/personal_expense_manager/_Category/categories.txt";
-		List<Category> catList = (List<Category>) deser(categoriesFilePath);
-		if (catList != null) {
-			repo.catList = catList;
-		}
-
-	}
-
+    // Method to generate an expense report
+    public void generateExpenseReport() {
+        System.out.println("Generating Expense Report...");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("expense_report.txt"))) {
+            for (Expense exp : repo.expList) {
+                String dateString = DateUtil.dateToString(exp.getDate());
+                String catName = reportService.getCategoryName(exp.getCategoryId());
+                writer.write(catName + ", " + exp.getAmount() + ", " + exp.getRemark() + ", " + dateString + "\n");
+            }
+            System.out.println("Expense report saved in expense_report.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

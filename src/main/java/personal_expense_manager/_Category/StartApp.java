@@ -1,11 +1,12 @@
 package personal_expense_manager._Category;
 
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class StartApp {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);  // Use a Scanner for user input
 
         // First, validate login before showing the menu
