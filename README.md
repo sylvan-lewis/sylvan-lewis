@@ -1,10 +1,14 @@
-- 👋 Hi, I’m @sylvan-lewis
-- 👀 I’m interested in TECH
-- 🌱 I’m currently learning how to become a full stack software developer
-- 💞️ I’m looking to collaborate on new repositories
-- 📫 How to reach me sylvanjrlewis@gmail.com
-- 😄 Pronouns: he/him
-- ⚡ Fun fact: Im learning githib
+👋 Hey, I’m Sylvan — Associate Software Engineer @ TD Bank Group  
+
+💻 I code full-stack:  
+⚙️ **Python +Java (Spring Boot)**  
+🎨 **ReactJS + Tailwind CSS**  
+🛢️ **PostgreSQL + MySQL**  
+☁️ **Azure Certified**  
+
+Always learning, always building — tech with purpose.
+
+
 
 <!---
 sylvan-lewis/sylvan-lewis is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
