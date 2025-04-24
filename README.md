@@ -1,7 +1,7 @@
 👋 Hey, I’m Sylvan — Associate Software Engineer @ TD Bank Group  
 
 💻 I code full-stack:  
-⚙️ **Python +Java (Spring Boot)**  
+⚙️ **Python + Java (Spring Boot)**  
 🎨 **ReactJS + Tailwind CSS**  
 🛢️ **PostgreSQL + MySQL**  
 ☁️ **Azure Certified**  
