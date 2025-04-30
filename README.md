@@ -6,7 +6,8 @@
 🛢️ **PostgreSQL + MySQL**  
 ☁️ **Azure Certified**  
 
-Always learning, always building — tech with purpose.
+
+✌️
 
 
 
